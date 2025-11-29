@@ -1,393 +1,453 @@
-# <font face='Orbitron' color='#00ffcc'>Dr_UT_GROMACS_COLAB</font>
-<font face='Rajdhani' color='#4ecdc4'>Advanced Molecular Dynamics Simulation Suite on Google Colab</font>
+# GROMACS-on-Colab
+
+This repository provides a suite of Jupyter notebooks for running molecular dynamics simulations on Google Colab using GROMACS. All simulations run on Google Colab's free GPU resources, and all inputs and outputs are stored on your Google Drive for persistence.
+
+## Overview
+
+This project consists of four main notebooks that work together to provide a complete molecular dynamics simulation workflow:
+
+1. **`Build_to_Google_Drive.ipynb`** - Installs GROMACS and dependencies to your Google Drive
+2. **`GROMACS_for_CHARMM-GUI.ipynb`** - Processes CHARMM-GUI system archives and equilibrates systems
+3. **`GROMACS_for_production.ipynb`** - Runs production molecular dynamics simulations
+4. **`Trajectory_analysis_tools.ipynb`** - Analyzes simulation trajectories
+
+All inputs and outputs are stored on your Google Drive, allowing you to work across multiple Colab sessions.
 
 ---
 
-## <font face='Rajdhani' color='#00ffcc'>🧬 Overview</font>
+## Prerequisites
 
-<font face='Rajdhani'>
-This comprehensive suite provides **cutting-edge molecular dynamics simulation capabilities** directly within your web browser using Google Colab. Powered by **GROMACS 2023.2** with advanced GPU acceleration, this platform enables researchers, students, and scientists to perform sophisticated computational chemistry experiments without requiring local high-performance computing resources.
+Before starting, ensure you have:
 
-**🚀 Key Features:**
-- **GPU-Accelerated Simulations** - Leverage CUDA-enabled GPUs for 3-12x performance improvements
-- **Intelligent Hardware Detection** - Automatic optimization for CPU and GPU architectures  
-- **Persistent Cloud Storage** - All simulations and results stored securely in Google Drive
-- **Production-Ready Workflows** - From CHARMM-GUI preparation to trajectory analysis
-- **Real-Time Monitoring** - Live simulation progress and performance metrics
-- **Advanced Checkpointing** - Resume simulations seamlessly after interruptions
-- **Professional Visualization** - Comprehensive trajectory analysis and plotting tools
+1. **A Google account** with access to:
+   - [Google Colab](https://colab.research.google.com/)
+   - [Google Drive](https://drive.google.com/) with sufficient storage space (at least 5-10 GB recommended)
 
-**🔬 Scientific Applications:**
-- Protein-ligand binding studies
-- Membrane protein dynamics
-- Drug discovery and virtual screening
-- Structural biology research
-- Biophysical simulations
-- Educational demonstrations
-</font>
+2. **CHARMM-GUI prepared systems** (if using CHARMM-GUI workflow):
+   - System archives (`.tgz` files) from CHARMM-GUI Solution Builder or Membrane Builder
+   - **Important**: You must enable "GROMACS compatible outputs" in CHARMM-GUI
+
+3. **Basic understanding** of molecular dynamics simulations and GROMACS (helpful but not required)
 
 ---
 
-## <font face='Rajdhani' color='#00ffcc'>🚀 Quick Start Guide</font>
+## Installation Instructions
 
-<font face='Rajdhani'>
+### Step 1: Install GROMACS to Google Drive
 
-### <span style='color:#ffd93d;'>Step 1: Foundation Setup</span>
-**Execute** <code style='background:#1a1a2e;color:#00ffcc;padding:2px 6px;border-radius:3px;'><a href='https://colab.research.google.com/github/SampleBias/Dr_UT_GROMACS_COLAB/blob/main/gromacs-on-colab/Build_to_Google_Drive.ipynb' style='color:#00ffcc;text-decoration:none;'>Build_to_Google_Drive.ipynb</a></code>
+**This step must be completed first before using any other notebooks.**
 
-- **Runtime**: CPU only (for compatibility)
-- **Duration**: 5-15 minutes
-- **Purpose**: Install GROMACS, dependencies, and create persistent cache
-- **Output**: `/gromacs-on-colab/` in your Google Drive
+1. **Open the installation notebook:**
+   - Open [`Build_to_Google_Drive.ipynb`](Build_to_Google_Drive.ipynb) in Google Colab
+   - Or use the "Open in Colab" badge if available
 
-### <span style='color:#ffd93d;'>Step 2: System Preparation</span>
-**Execute** <code style='background:#1a1a2e;color:#00ffcc;padding:2px 6px;border-radius:3px;'><a href='https://colab.research.google.com/github/SampleBias/Dr_UT_GROMACS_COLAB/blob/main/gromacs-on-colab/GROMACS_for_CHARMM-GUI.ipynb' style='color:#00ffcc;text-decoration:none;'>GROMACS_for_CHARMM-GUI.ipynb</a></code>
+2. **Connect to Google Drive:**
+   - The notebook will prompt you to mount your Google Drive
+   - Click "Connect to Google Drive" and authorize access
+   - Your Drive will be mounted at `/content/drive/MyDrive`
 
-- **Runtime**: GPU recommended
-- **Duration**: 30-120 minutes (system size dependent)
-- **Purpose**: Process CHARMM-GUI archives and equilibrate systems
-- **Requirements**: CHARMM-GUI archive with GROMACS output enabled
-- **Output**: Equilibrated system folder for production simulation
+3. **Select runtime type:**
+   - **Important**: Go to `Runtime → Change runtime type`
+   - Select **"CPU only / Standard RAM"** (not GPU)
+   - This ensures compatibility with all runtime types
 
-### <span style='color:#ffd93d;'>Step 3: Production Simulation</span>
-**Execute** <code style='background:#1a1a2e;color:#00ffcc;padding:2px 6px;border-radius:3px;'><a href='https://colab.research.google.com/github/SampleBias/Dr_UT_GROMACS_COLAB/blob/main/gromacs-on-colab/GROMACS_for_production.ipynb' style='color:#00ffcc;text-decoration:none;'>GROMACS_for_production.ipynb</a></code>
+4. **Run the installation:**
+   - Click `Runtime → Run all` in the toolbar
+   - Or run each cell sequentially by clicking the play button
+   - The installation will:
+     - Download and install GROMACS (version 2023.2)
+     - Set up Miniconda environments for Python tools
+     - Download CHARMM36 forcefield
+     - Install `cgenff_charmm2gmx.py` utility
+     - Cache everything to `{GoogleDrive}/gromacs-on-colab/`
 
-- **Runtime**: GPU highly recommended
-- **Duration**: Hours to days (simulation length dependent)
-- **Purpose**: Run production molecular dynamics simulations
-- **Features**: Intelligent GPU optimization, checkpointing, monitoring
-- **Output**: Trajectory files (`.xtc`, `.trr`), energies, analysis data
+5. **Wait for completion:**
+   - Installation typically takes 10-30 minutes depending on whether prebuilt binaries are available
+   - If prebuilt binaries aren't available, GROMACS will be compiled from source (takes longer)
+   - All installations are cached to your Google Drive for future use
 
-### <span style='color:#ffd93d;'>Step 4: Trajectory Analysis</span>
-**Execute** <code style='background:#1a1a2e;color:#00ffcc;padding:2px 6px;border-radius:3px;'><a href='https://colab.research.google.com/github/SampleBias/Dr_UT_GROMACS_COLAB/blob/main/gromacs-on-colab/Trajectory_analysis_tools.ipynb' style='color:#00ffcc;text-decoration:none;'>Trajectory_analysis_tools.ipynb</a></code>
+6. **Disconnect (optional):**
+   - The notebook will automatically disconnect the runtime when finished
+   - You can also manually disconnect via `Runtime → Disconnect and delete runtime`
 
-- **Runtime**: CPU sufficient
-- **Duration**: 15-60 minutes
-- **Purpose**: Analyze simulation results and generate visualizations
-- **Features**: RMSD analysis, centroid structures, energy calculations
-- **Output**: Plots, analysis reports, processed trajectories
-</font>
+**What gets installed:**
+- GROMACS 2023.2 (cached to `{GoogleDrive}/gromacs-on-colab/gromacs-2023.2.tar.gz`)
+- Miniconda3 with Python environments (cached to `{GoogleDrive}/gromacs-on-colab/`)
+- CHARMM36 forcefield (cached to `{GoogleDrive}/gromacs-on-colab/charmm36-jul2022.tar.gz`)
+- `cgenff_charmm2gmx.py` utility for ligand parameterization
 
 ---
 
-## <font face='Rajdhani' color='#00ffcc'>⚡ GPU Optimization Deep Dive</font>
+## Detailed Workflow Instructions
 
-<font face='Rajdhani'>
+### Workflow 1: Protein-Ligand Complex Simulation
 
-### <span style='color:#4ecdc4;'>🎯 When to Use GPU Acceleration</span>
+This is the most common workflow for simulating a protein-ligand complex.
 
-**✅ IDEAL FOR GPU:**
-- **Production MD Simulations** - Long, computationally intensive simulations
-- **Large Systems** - >10,000 atoms (proteins, membranes, complexes)
-- **Extended Simulations** - >100 nanoseconds of simulated time
-- **Complex Force Fields** - CHARMM36, AMBER with detailed parameters
-- **High-Throughput** - Multiple concurrent simulations
-- **Advanced Analysis** - Energy decomposition, enhanced sampling
+#### Step 1: Prepare Your Structures
 
-**❌ USE CPU INSTEAD:**
-- **Installation/Compilation** - Build notebook (compatibility reasons)
-- **Small Test Systems** - <1,000 atoms (overhead > benefits)
-- **Short Equilibration** - <1 nanosecond (startup costs)
-- **GPU Compatibility Issues** - Known problematic systems
-- **Memory-Intensive Preprocessing** - File preparation, topology generation
+1. **Obtain or prepare your protein structure:**
+   - Download from [Protein Data Bank (PDB)](https://www.rcsb.org/) or [AlphaFold Database](https://alphafold.ebi.ac.uk/)
+   - Ensure the structure is complete (no major gaps)
+   - Save as `protein.pdb`
 
-### <span style='color:#4ecdc4;'>🔧 GPU Configuration Details</span>
+2. **Dock your ligand:**
+   - Use [AutoDock Vina](https://vina.scripps.edu/) or similar docking software
+   - Convert formats if needed using [Open Babel](https://github.com/openbabel/openbabel)
+   - Save the docked complex as `docked_ligand.sdf` or `docked_ligand.pdb`
 
-**🚀 Performance Optimizations:**
-```bash
-# CUDA Graph for enhanced performance
-export GMX_CUDA_GRAPH=1
+#### Step 2: Process in CHARMM-GUI
 
-# Bonded calculations on GPU
--bonded gpu
+1. **Process the protein in CHARMM-GUI Solution Builder:**
+   - Go to [CHARMM-GUI Solution Builder](https://www.charmm-gui.org/?doc=input/solution)
+   - Upload your `protein.pdb` (the same structure used for docking)
+   - Follow the wizard, accepting default settings
+   - **Critical**: At the final step, **enable "GROMACS compatible outputs"**
+   - Download the archive: `protein_CHARMM.tgz`
 
-# Update group optimization
--update gpu
+2. **Process the ligand in CHARMM-GUI Ligand Reader:**
+   - Go to [CHARMM-GUI Ligand Reader](https://www.charmm-gui.org/?doc=input/ligandrm)
+   - Upload your `docked_ligand.sdf` (the docking output)
+   - Keep the default residue name: `LIG` (for custom ligands)
+   - Download the archive: `docked_ligand_CHARMM.tgz`
 
-# Memory and thread optimization
--ntmpi 1  # For most GPU simulations
-nstlist=100  # Optimized for GPU throughput
+3. **Upload to Google Drive:**
+   - Upload both `.tgz` files to your Google Drive
+   - Note the full paths, e.g.:
+     - `{GoogleDrive}/CHARMM-GUI/protein_CHARMM.tgz`
+     - `{GoogleDrive}/CHARMM-GUI/docked_ligand_CHARMM.tgz`
+
+#### Step 3: Equilibrate the System
+
+1. **Open the equilibration notebook:**
+   - Open [`GROMACS_for_CHARMM-GUI.ipynb`](GROMACS_for_CHARMM-GUI.ipynb) in Google Colab
+
+2. **Select GPU runtime:**
+   - Go to `Runtime → Change runtime type`
+   - Select **"GPU"** (T4, V100, or A100)
+   - This accelerates the equilibration simulations
+
+3. **Configure the notebook:**
+   - In the "Configuration" section, fill in:
+     - **`protein_archive`**: Path to your protein `.tgz` file
+       - Example: `{GoogleDrive}/CHARMM-GUI/protein_CHARMM.tgz`
+     - **`output_folder`**: Where to save the equilibrated system
+       - Example: `{GoogleDrive}/GROMACS/my_protein_ligand_project`
+     - **`ligand_archives`**: Path to your ligand `.tgz` file
+       - Example: `{GoogleDrive}/CHARMM-GUI/docked_ligand_CHARMM.tgz`
+     - **Advanced options** (optional):
+       - `double_equilibration_length`: Extend equilibration time (default: False)
+       - `remove_cmap_terms`: Remove CMAP terms for faster GPU performance but lower accuracy (default: False)
+
+4. **Run the notebook:**
+   - Click `Runtime → Run all`
+   - The notebook will:
+     - Extract and merge the protein and ligand systems
+     - Generate GROMACS-compatible topologies
+     - Run minimization and equilibration steps
+     - Save the equilibrated system to your output folder
+
+5. **Wait for completion:**
+   - Equilibration typically takes 30-60 minutes
+   - The output folder will contain:
+     - `conf.gro` - Equilibrated coordinates
+     - `topol.top` - System topology
+     - `toppar/` - Forcefield parameters
+     - `index.ndx` - Group definitions
+     - `grompp.mdp` - Production simulation parameters
+     - `restraint.gro` - Reference structure for restraints
+
+#### Step 4: Run Production Simulation
+
+1. **Open the production notebook:**
+   - Open [`GROMACS_for_production.ipynb`](GROMACS_for_production.ipynb) in Google Colab
+
+2. **Select GPU runtime:**
+   - Go to `Runtime → Change runtime type`
+   - Select **"GPU"** for best performance
+
+3. **Configure the notebook:**
+   - In the "Configuration" section, fill in:
+     - **`project_folder`**: Path to your equilibrated system folder
+       - Example: `{GoogleDrive}/GROMACS/my_protein_ligand_project`
+     - **`simulation_duration_ns`**: How long to simulate (in nanoseconds)
+       - Example: `10` for a 10 ns simulation
+     - **`output_prefix`**: Unique name for this simulation
+       - Example: `sim` or `production_run_1`
+     - **Advanced options** (optional):
+       - `rmsd_group`: Group to monitor for early stopping (e.g., `LIG`)
+       - `rmsd_early_stop_threshold_A`: RMSD threshold in Angstroms (default: 12.0)
+
+4. **Run the notebook:**
+   - Click `Runtime → Run all`
+   - The simulation will run in blocks (typically 1 ns each)
+   - Each block is saved as a partial output file
+   - The simulation automatically continues until the target duration is reached
+
+5. **Monitor progress:**
+   - Check the output for performance metrics
+   - Partial trajectory files are saved after each block
+   - The final trajectory is saved as `{output_prefix}_reference.xtc`
+
+6. **Resume if interrupted:**
+   - If the simulation is interrupted, simply run the notebook again
+   - It will automatically detect and resume from the last checkpoint
+
+#### Step 5: Analyze Trajectory (Optional)
+
+1. **Open the analysis notebook:**
+   - Open [`Trajectory_analysis_tools.ipynb`](Trajectory_analysis_tools.ipynb) in Google Colab
+
+2. **Configure the notebook:**
+   - **`project_folder`**: Path to your project folder with trajectory files
+   - **`output_prefix`**: The prefix used in your production simulation
+
+3. **Run analyses:**
+   - The notebook provides various analysis tools:
+     - Calculate centroid structures for specific time spans
+     - Compute RMSD over time
+     - Measure interatomic distances
+     - Calculate interaction energies
+   - Run the cells for the analyses you need
+
+---
+
+### Workflow 2: Protein-Only Simulation
+
+For simulations without ligands, follow a simplified workflow:
+
+1. **Prepare protein in CHARMM-GUI Solution Builder:**
+   - Upload your protein structure
+   - Enable GROMACS outputs
+   - Download `protein_CHARMM.tgz`
+
+2. **Equilibrate using `GROMACS_for_CHARMM-GUI.ipynb`:**
+   - Set `protein_archive` to your `.tgz` file
+   - Leave `ligand_archives` empty
+   - Run the notebook
+
+3. **Run production simulation:**
+   - Use `GROMACS_for_production.ipynb` as described above
+
+---
+
+### Workflow 3: Membrane Protein Simulation
+
+For membrane proteins:
+
+1. **Use CHARMM-GUI Membrane Builder** instead of Solution Builder
+2. **Follow the same workflow** as protein-ligand complexes
+3. The notebook automatically detects membrane systems and adjusts parameters
+
+---
+
+## Notebook Details
+
+### Build_to_Google_Drive.ipynb
+
+**Purpose:** One-time installation of GROMACS and dependencies
+
+**Runtime:** CPU only (Standard RAM)
+
+**What it does:**
+- Downloads/compiles GROMACS 2023.2
+- Sets up Miniconda environments
+- Downloads CHARMM36 forcefield
+- Caches everything to Google Drive
+
+**When to run:** Once, before using any other notebooks
+
+**Estimated time:** 10-30 minutes
+
+---
+
+### GROMACS_for_CHARMM-GUI.ipynb
+
+**Purpose:** Process CHARMM-GUI archives and equilibrate systems
+
+**Runtime:** GPU recommended
+
+**Inputs:**
+- Protein archive from CHARMM-GUI Solution/Membrane Builder
+- (Optional) Ligand archive(s) from CHARMM-GUI Ligand Reader
+
+**Outputs:**
+- Equilibrated system ready for production simulation
+- All files saved to specified output folder
+
+**Key features:**
+- Merges protein and ligand systems
+- Generates GROMACS topologies
+- Runs minimization and equilibration
+- Handles multiple ligands
+- Supports membrane systems
+
+**Estimated time:** 30-60 minutes
+
+---
+
+### GROMACS_for_production.ipynb
+
+**Purpose:** Run production molecular dynamics simulations
+
+**Runtime:** GPU required for performance
+
+**Inputs:**
+- Project folder from equilibration step
+- Simulation duration (nanoseconds)
+- Output prefix
+
+**Outputs:**
+- Production trajectory (`{prefix}_reference.xtc`)
+- Checkpoint files for resuming
+- Summary file with performance metrics
+
+**Key features:**
+- Automatic checkpointing and resuming
+- Early stopping based on RMSD (optional)
+- Progressive trajectory processing
+- Saves partial outputs after each block
+
+**Estimated time:** Depends on simulation length (typically 1-2 hours per nanosecond)
+
+---
+
+### Trajectory_analysis_tools.ipynb
+
+**Purpose:** Analyze simulation trajectories
+
+**Runtime:** CPU or GPU
+
+**Inputs:**
+- Project folder with trajectory files
+- Output prefix from production simulation
+
+**Available analyses:**
+- Centroid structure calculation
+- RMSD calculations
+- Distance measurements
+- Interaction energy analysis
+
+---
+
+## Important Notes and Tips
+
+### Google Drive Path Format
+
+When specifying paths in notebooks, use the format:
+```
+{GoogleDrive}/path/to/file
 ```
 
-**🎮 GPU Memory Management:**
-- **>15GB VRAM** (A100): Full optimization enabled
-- **8-15GB VRAM** (V100/T4): Standard GPU acceleration
-- **<8GB VRAM**: Conservative GPU usage
+This will be automatically converted to `/content/drive/MyDrive/path/to/file` in Colab.
 
-**⚡ Performance Benchmarks:**
-- **T4 GPU**: 3-5x speedup vs CPU
-- **V100 GPU**: 5-8x speedup vs CPU  
-- **A100 GPU**: 8-12x speedup vs CPU
+### Runtime Selection
 
-### <span style='color:#4ecdc4;'>🤔 Why Build Notebook Uses CPU</span>
+- **CPU only**: Use for installation (`Build_to_Google_Drive.ipynb`)
+- **GPU**: Use for equilibration and production simulations
+- **GPU types**: T4 (free tier), V100, or A100 (Colab Pro)
 
-The **Build_to_Google_Drive.ipynb** intentionally uses CPU-only runtime for critical reasons:
+### Storage Considerations
 
-1. **🔒 Universal Compatibility** - Ensures functionality across all Colab instance types
-2. **💾 Compilation Requirements** - GROMACS compilation needs significant system memory
-3. **⚙️ Dependency Resolution** - Some packages conflict with GPU environments
-4. **🔄 Installation Stability** - CPU-only environment reduces compilation failures
-5. **📦 Caching Efficiency** - Better resource allocation for installation tasks
+- Each simulation can generate several GB of data
+- Trajectory files (`.xtc`) are compressed but can still be large
+- Monitor your Google Drive storage space
+- Consider downloading large files locally if needed
 
-**Result:** You get a GPU-enabled GROMACS build that's optimized for simulation notebooks while maintaining universal installation compatibility.
-</font>
+### Resuming Simulations
 
----
+- Production simulations automatically save checkpoints
+- If interrupted, simply re-run the production notebook
+- It will detect and resume from the last checkpoint
+- Partial trajectory files are preserved
 
-## <font face='Rajdhani' color='#00ffcc'>📚 Comprehensive Tutorial</font>
+### Performance Optimization
 
-<font face='Rajdhani'>
+- Use GPU runtime for simulations (much faster than CPU)
+- For very long simulations, consider breaking into multiple runs
+- The `remove_cmap_terms` option can improve GPU performance but reduces accuracy
+- Monitor the performance summary in production notebook output
 
-### <span style='color:#ffd93d;'>Protein-Ligand Simulation Workflow</span>
+### Troubleshooting
 
-**🔬 Step 1: Structure Acquisition**
-1. **Protein Structure**: Download from [Protein Data Bank](https://www.rcsb.org/) or [AlphaFold DB](https://alphafold.ebi.ac.uk/)
-2. **Ligand Structure**: Obtain from [PubChem](https://pubchem.ncbi.nlm.nih.gov/) or similar databases
-3. **File Format**: Ensure both are in appropriate formats (`.pdb`, `.mol2`, `.sdf`)
+**Installation fails:**
+- Ensure you're using CPU runtime for installation
+- Check Google Drive has sufficient space
+- Try running cells individually to identify the issue
 
-**🧪 Step 2: Molecular Docking**
-1. **Docking Software**: Use [AutoDock Vina](https://vina.scripps.edu/) or similar
-2. **File Conversion**: Use [Open Babel](https://github.com/openbabel/openbabel) for format conversion
-3. **Output**: Generate docked ligand coordinates aligned to protein structure
+**Equilibration fails:**
+- Verify CHARMM-GUI archives are complete
+- Check that GROMACS outputs were enabled in CHARMM-GUI
+- Ensure protein and ligand coordinates are compatible
 
-**🏗️ Step 3: CHARMM-GUI System Preparation**
+**Production simulation slow:**
+- Ensure GPU runtime is selected
+- Check GPU is being utilized (see performance summary)
+- Consider using `remove_cmap_terms` for faster performance
 
-**Protein System Setup:**
-1. Visit [CHARMM-GUI Solution Builder](https://www.charmm-gui.org/?doc=input/solution)
-2. Upload your protein structure (must be the same structure used for docking)
-3. Configure system parameters (solvent, ions, box type)
-4. **CRITICAL**: In the final step, **enable GROMACS output format**
-5. Download the generated archive: `protein_CHARMM.tgz`
-
-**Ligand Parameterization (Optional but Recommended):**
-1. Visit [CHARMM-GUI Ligand Reader](https://www.charmm-gui.org/?doc=input/ligand)
-2. Upload your docked ligand structure
-3. Keep default residue name: `LIG` (or canonical name for known ligands)
-4. Download the ligand archive: `docked_ligand_CHARMM.tgz`
-
-**☁️ Step 4: Upload to Google Drive**
-1. Upload both archives to your Google Drive root
-2. Ensure file names match exactly what you'll specify in notebooks
-
-**🚀 Step 5: Execute GROMACS-on-Colab Workflow**
-1. Run the 4 notebooks in sequence as described in Quick Start Guide
-2. Monitor each step carefully for successful completion
-3. Verify outputs at each stage before proceeding
-
-**📊 Step 6: Analysis and Interpretation**
-1. Use trajectory analysis tools to generate RMSD plots
-2. Calculate interaction energies and distances
-3. Visualize results with VMD, PyMOL, or similar software
-4. Interpret results in context of your scientific question
-
-### <span style='color:#ffd93d;'>Advanced Configuration Options</span>
-
-**🔧 Simulation Parameters:**
-- **Time Step**: 2fs with hydrogen mass repartitioning
-- **Temperature**: 310K (physiological) or system-specific
-- **Pressure**: 1atm with appropriate barostat
-- **Duration**: 100-500ns for typical protein-ligand studies
-
-**⚙️ GPU-Specific Settings:**
-- **CUDA Graph**: Enabled for performance enhancement
-- **Update Frequency**: Optimized for GPU memory access patterns
-- **Bonded Interactions**: GPU-accelerated when possible
-- **Non-bonded Cutoffs**: Optimized for GPU throughput
-
-**💾 Data Management:**
-- **Checkpoint Frequency**: Every 10ps (adjustable)
-- **Trajectory Storage**: Compressed XTC format for space efficiency
-- **Energy Storage**: Optional based on analysis requirements
-- **Google Drive Sync**: Automatic backup of critical files
-</font>
+**Trajectory analysis errors:**
+- Verify trajectory files exist in project folder
+- Check output prefix matches production simulation
+- Ensure sufficient runtime time for analysis
 
 ---
 
-## <font face='Rajdhani' color='#00ffcc'>🛠️ Technical Specifications</font>
+## Example Commands and Paths
 
-<font face='Rajdhani'>
+### Typical Google Drive Structure
 
-### <span style='color:#4ecdc4;'>🔬 Core Software Stack</span>
-
-**📦 Simulation Engine:**
-- **GROMACS 2023.2** with CUDA GPU acceleration
-- **CHARMM36m** force field compatibility
-- **TIP3P** water model optimization
-- **PME** electrostatics for accurate long-range interactions
-
-**🐍 Scientific Computing:**
-- **Python 3.10** with optimized scientific libraries
-- **NumPy <=1.23** for numerical computations
-- **BioPython** for structural bioinformatics
-- **Matplotlib/Seaborn** for advanced visualization
-- **NetworkX** for topology analysis
-
-**🔧 Analysis Tools:**
-- **CGenFF** ligand parameterization
-- **Open Babel** for molecular format conversion
-- **GROMACS analysis suite** (gmx rms, gmx energy, etc.)
-- **Custom trajectory analysis** scripts
-
-### <span style='color:#4ecdc4;'>💻 System Requirements</span>
-
-**🖥️ Minimum Requirements:**
-- **RAM**: 15GB for most protein-ligand systems
-- **Storage**: 10GB Google Drive space (varies with system size)
-- **Internet**: Stable connection for file synchronization
-- **Browser**: Modern web browser with JavaScript enabled
-
-**🚀 Recommended for GPU:**
-- **VRAM**: 8GB+ for optimal performance
-- **CUDA**: Compatible GPU (T4, V100, A100)
-- **Compute Capability**: 6.0+ for full feature support
-- **Driver**: Up-to-date NVIDIA drivers
-
-### <span style='color:#4ecdc4;'>📊 Performance Metrics</span>
-
-**⏱️ Typical Simulation Durations:**
-- **Energy Minimization**: 5-15 minutes
-- **Equilibration**: 30-120 minutes
-- **Production MD**: 1-8 hours per 100ns (GPU dependent)
-
-**💾 Storage Requirements:**
-- **Input Files**: 100MB - 1GB
-- **Trajectory Data**: 1-10GB per 100ns (compression dependent)
-- **Analysis Output**: 100MB - 500MB
-
-**🔄 Checkpointing Strategy:**
-- **Frequency**: Every 10ps of simulation time
-- **Storage**: Incremental backups to Google Drive
-- **Recovery**: Seamless resume from any checkpoint
-</font>
-
----
-
-## <font face='Rajdhani' color='#00ffcc'>🤝 Contributing & Support</font>
-
-<font face='Rajdhani'>
-
-### <span style='color:#4ecdc4;'>📧 Getting Help</span>
-
-**🐛 Bug Reports:**
-- File issues on [GitHub Issues](https://github.com/SampleBias/Dr_UT_GROMACS_COLAB/issues)
-- Include system information and error messages
-- Provide steps to reproduce the problem
-
-**💬 Discussion:**
-- Join our scientific community discussions
-- Share simulation results and methodologies
-- Contribute to feature development
-
-**📚 Documentation:**
-- Comprehensive inline documentation in each notebook
-- Advanced configuration options in cell comments
-- Regular updates with latest GROMACS features
-
-### <span style='color:#4ecdc4;'>🔬 Scientific Collaboration</span>
-
-**📊 Research Applications:**
-- Perfect for educational institutions with limited HPC access
-- Enables rapid prototyping of simulation protocols
-- Facilitates collaborative research across institutions
-
-**🎓 Academic Use:**
-- Ideal for teaching computational chemistry
-- Supports student research projects
-- Provides hands-on MD simulation experience
-
-**💼 Industry Applications:**
-- Drug discovery pipeline integration
-- Rapid lead optimization studies
-- Preliminary screening before HPC investment
-
-### <span style='color:#4ecdc4;'>🔮 Future Development</span>
-
-**🚀 Planned Enhancements:**
-- **Multi-GPU Support** for larger systems
-- **Enhanced Sampling** methods integration
-- **Machine Learning** analysis tools
-- **Cloud Storage** optimization
-- **Real-time Visualization** capabilities
-
-**🧪 Experimental Features:**
-- **Quantum Mechanics/Molecular Mechanics** (QM/MM) support
-- **Enhanced Sampling** algorithms
-- **Automated Parameterization** workflows
-- **Advanced Analysis** pipelines
-
----
-
-## <font face='Rajdhani' color='#00ffcc'>📜 License & Citation</font>
-
-<font face='Rajdhani'>
-
-### <span style='color:#4ecdc4;'>⚖️ License Information</span>
-
-This project is licensed under the **AGPL-3.0 License** - see the [LICENSE](LICENSE) file for details.
-
-**🔒 Usage Terms:**
-- ✅ Free for academic and research use
-- ✅ Commercial use permitted with compliance
-- ✅ Modification and redistribution allowed
-- ⚠️ Must provide source code for modifications
-- ⚠️ Network users must have access to source
-
-### <span style='color:#4ecdc4;'>📖 Citation Guidelines</span>
-
-If you use GROMACS-on-Colab in your research, please cite:
-
-**🔬 Primary Citation:**
 ```
-GROMACS-on-Colab: Web-based Molecular Dynamics Simulation Platform
-[Journal information and DOI to be added upon publication]
+MyDrive/
+├── gromacs-on-colab/          (created by Build_to_Google_Drive.ipynb)
+│   ├── gromacs-2023.2.tar.gz
+│   ├── Miniconda3-*.tar.gz
+│   └── charmm36-*.tar.gz
+├── CHARMM-GUI/
+│   ├── protein_CHARMM.tgz
+│   └── ligand_CHARMM.tgz
+└── GROMACS/
+    └── my_project/
+        ├── conf.gro
+        ├── topol.top
+        ├── toppar/
+        ├── grompp.mdp
+        ├── sim_reference.xtc
+        └── sim_reference.summary
 ```
 
-**📚 Software Citations:**
-- GROMACS: Abraham et al., *SoftwareX* 2015, 1-2, 19-25
-- CHARMM-GUI: Jo et al., *J. Comput. Chem.* 2008, 29, 1859-1865
-- CHARMM36m: Huang et al., *Nat. Methods* 2017, 14, 71-73
+### Example Configuration Values
+
+**For GROMACS_for_CHARMM-GUI.ipynb:**
+```
+protein_archive = "{GoogleDrive}/CHARMM-GUI/protein_CHARMM.tgz"
+output_folder = "{GoogleDrive}/GROMACS/my_protein_ligand"
+ligand_archives = "{GoogleDrive}/CHARMM-GUI/ligand_CHARMM.tgz"
+```
+
+**For GROMACS_for_production.ipynb:**
+```
+project_folder = "{GoogleDrive}/GROMACS/my_protein_ligand"
+simulation_duration_ns = 10
+output_prefix = "sim"
+```
 
 ---
 
-## <font face='Rajdhani' color='#00ffcc'>🌟 Acknowledgments</font>
+## Additional Resources
 
-<font face='Rajdhani'>
-
-### <span style='color:#4ecdc4;'>🏆 Key Contributors</span>
-
-**🔬 Development Team:**
-- **Lead Developer**: [Maintainer information]
-- **Scientific Advisors**: [Research collaboration details]
-- **Community Contributors**: [GitHub contributors list]
-
-**🏛️ Institutional Support:**
-- **Google Colab Platform** for computational resources
-- **GROMACS Development Team** for simulation engine
-- **CHARMM-GUI Team** for system preparation tools
-- **Open Source Community** for supporting libraries
-
-### <span style='color:#4ecdc4;'>💝 Special Thanks</span>
-
-- **Researchers worldwide** who tested and provided feedback
-- **Educational institutions** that integrated this platform into curricula
-- **Scientific community** for continuous improvement and support
-- **Google** for providing the Colab platform that makes this possible
+- [GROMACS Manual](https://manual.gromacs.org/)
+- [CHARMM-GUI Documentation](https://www.charmm-gui.org/)
+- [CHARMM36 Forcefield](https://mackerell.umaryland.edu/charmm_ff.shtml)
+- [Google Colab Documentation](https://colab.research.google.com/notebooks/intro.ipynb)
 
 ---
 
-<div align='center' style='margin-top: 50px;'>
+## License
 
-<font face='Orbitron' size='6' color='#00ffcc'>**Thank You for Using**</font><br>
-<font face='Orbitron' size='8' color='#4ecdc4'>**GROMACS-on-Colab**</font>
-
-<br><br>
-<font face='Rajdhani' color='#95e1d3'>
-<span style='color:#ffd93d;'>🔬 Advancing Science Through Accessible Computing</span><br>
-<span style='color:#a8e6cf;'>🚀 Bringing Molecular Dynamics to Every Researcher yay!</span>
-</font>
-
-</div>
+This project is licensed under the AGPL-3.0 or later license. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-*<center><font face='Rajdhani' color='#666'>Last Updated: November 2025 | Version: Enhanced with GPU Optimization</font></center>*
+## Support
+
+For issues, questions, or contributions, please refer to the original repository or create an issue in the project repository.
