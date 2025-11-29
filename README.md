@@ -383,7 +383,7 @@ GROMACS-on-Colab: Web-based Molecular Dynamics Simulation Platform
 <br><br>
 <font face='Rajdhani' color='#95e1d3'>
 <span style='color:#ffd93d;'>🔬 Advancing Science Through Accessible Computing</span><br>
-<span style='color:#a8e6cf;'>🚀 Bringing Molecular Dynamics to Every Researcher</span>
+<span style='color:#a8e6cf;'>🚀 Bringing Molecular Dynamics to Every Researcher yay!</span>
 </font>
 
 </div>
