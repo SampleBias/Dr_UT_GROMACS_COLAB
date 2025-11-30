@@ -29,6 +29,131 @@ Before starting, ensure you have:
 
 3. **Basic understanding** of molecular dynamics simulations and GROMACS (helpful but not required)
 
+4. **VS Code with Google Drive Extension** (optional, for local file management):
+   - [Visual Studio Code](https://code.visualstudio.com/) installed
+   - Google Drive service account JSON credentials file
+
+---
+
+## VS Code Setup (Optional - For Local File Management)
+
+If you want to access and edit your Google Drive files directly in VS Code, you can use the Google Drive extension. This is useful for managing notebook files, viewing outputs, and organizing your project structure locally.
+
+### Step 1: Install the Google Drive Extension
+
+1. **Open VS Code** and go to the Extensions view:
+   - Press `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (Mac)
+   - Or click the Extensions icon in the sidebar
+
+2. **Search for "Google Drive"**:
+   - Look for **"Google Drive™ (Unofficial)"** by Gustavo Cassel
+   - Click **Install**
+
+3. **Verify installation**:
+   - The extension should appear in your installed extensions list
+   - You may see a notification about configuring credentials
+
+### Step 2: Configure JSON Credentials
+
+You need a Google Cloud service account JSON key file to authenticate with Google Drive. If you already have this file, follow these steps:
+
+1. **Open VS Code Settings**:
+   - Press `Ctrl+,` (Windows/Linux) or `Cmd+,` (Mac)
+   - Or go to `File → Preferences → Settings`
+
+2. **Search for Google Drive settings**:
+   - In the settings search bar, type: `google drive`
+   - Look for settings related to the Google Drive extension
+
+3. **Configure credentials** (choose one method):
+
+   **Method A: Using Settings UI**
+   - Find the setting: **"Google Drive: Service Account Key"** or **"Google Drive: Credentials"**
+   - Click "Edit in settings.json" or paste your JSON content directly
+   - Save the settings file
+
+   **Method B: Using Command Palette**
+   - Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
+   - Type: `Google Drive: Configure` or `Google Drive: Setup`
+   - Follow the prompts to enter your credentials
+
+   **Method C: Direct settings.json edit**
+   - Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
+   - Type: `Preferences: Open User Settings (JSON)`
+   - Add your credentials in one of these formats:
+     ```json
+     {
+       "googleDrive.serviceAccountKey": "/path/to/your/credentials.json"
+     }
+     ```
+     Or paste the JSON content directly:
+     ```json
+     {
+       "googleDrive.serviceAccountKey": {
+         "type": "service_account",
+         "project_id": "your-project-id",
+         "private_key_id": "your-key-id",
+         "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+         "client_email": "your-service-account@your-project.iam.gserviceaccount.com",
+         "client_id": "your-client-id",
+         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+         "token_uri": "https://oauth2.googleapis.com/token",
+         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/..."
+       }
+     }
+     ```
+
+### Step 3: Connect to Google Drive
+
+1. **Open the Command Palette**:
+   - Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
+
+2. **Connect to Google Drive**:
+   - Type: `Google Drive: Connect` or `Google Drive: Mount`
+   - Select the command and follow any additional prompts
+
+3. **Verify connection**:
+   - You should see your Google Drive files in the VS Code explorer
+   - Look for a "Google Drive" section or mounted drive icon
+
+### Step 4: Access Your Project Files
+
+Once connected, you can:
+- Browse your Google Drive files directly in VS Code
+- Edit notebook files (`.ipynb`) locally
+- View and manage simulation outputs
+- Organize your project structure
+- Sync changes back to Google Drive
+
+### Important Security Notes
+
+⚠️ **Never commit credentials to Git:**
+- Add your JSON credentials file to `.gitignore`:
+  ```
+  *.json
+  credentials.json
+  service-account-key.json
+  ```
+- The `.vscode/extensions.json` file is safe to commit (it only recommends extensions)
+- Keep your credentials file secure and never share it publicly
+
+### Troubleshooting VS Code Extension
+
+**Extension not connecting:**
+- Verify your JSON credentials file is valid
+- Check that the service account has Google Drive API enabled
+- Ensure the service account has appropriate permissions
+
+**Can't find settings:**
+- Make sure the extension is installed and enabled
+- Try reloading VS Code (`Ctrl+R` or `Cmd+R`)
+- Check the extension's documentation for the exact setting names
+
+**Files not syncing:**
+- The extension may require manual refresh
+- Use the Command Palette: `Google Drive: Refresh` or `Google Drive: Sync`
+
 ---
 
 ## Installation Instructions
